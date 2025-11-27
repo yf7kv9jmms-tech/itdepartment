@@ -1,188 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Hub - Browser Emulator</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        header {
-            background: rgba(0,0,0,0.3);
-            padding: 20px;
-            text-align: center;
-        }
-        .game-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            flex: 1;
-        }
-        .game-card {
-            background: rgba(255,255,255,0.1);
-            border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 10px;
-            padding: 15px;
-            cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s;
-            text-align: center;
-        }
-        .game-card:hover {
-            transform: translateY(-5px);
-            border-color: #4CAF50;
-        }
-        .game-card h3 {
-            margin: 10px 0 5px;
-        }
-        .game-card p {
-            font-size: 0.9em;
-            color: #ccc;
-        }
-        #emulator-container {
-            display: none;
-            flex: 1;
-            position: relative;
-        }
-        #canvas {
-            width: 100%;
-            max-width: 800px;
-            margin: 20px auto;
-            display: block;
-            border: 3px solid #4CAF50;
-            border-radius: 10px;
-        }
-        .controls {
-            text-align: center;
-            padding: 20px;
-            background: rgba(0,0,0,0.5);
-        }
-        button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover { background: #45a049; }
-        .hidden { display: none !important; }
-    </style>
+    <title>Test</title>
+    <style>body{background:#000;color:#fff;font-family:sans-serif}</style>
 </head>
 <body>
-    <header>
-        <h1>🎮 Browser Game Hub</h1>
-        <p>Click any game to start playing</p>
-    </header>
-
-    <!-- Game Selection Screen -->
-    <div id="game-selection" class="game-grid">
-        <div class="game-card" onclick="startGame('gba', 'games/Pokemon - Emerald Version (USA, Europe).zip')">
-            <h3>Pokemon Emerald</h3>
-            <p>GBA · RPG</p>
-        </div>
-        <div class="game-card" onclick="startGame('gba', 'games/metroid.zip')">
-            <h3>Metroid Fusion</h3>
-            <p>GBA · Action</p>
-        </div>
-        <div class="game-card" onclick="startGame('nes', 'games/mario.zip')">
-            <h3>Super Mario Bros</h3>
-            <p>NES · Platformer</p>
-        </div>
-    </div>
-
-    <!-- Emulator Screen -->
-    <div id="emulator-container">
-        <div class="controls">
-            <button onclick="saveState()">💾 Save State</button>
-            <button onclick="loadState()">📂 Load State</button>
-            <button onclick="exitGame()">⬅️ Back to Library</button>
-        </div>
-        <canvas id="canvas"></canvas>
-    </div>
-
-    <!-- EmulatorJS Script -->
-    <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
+    <h1>Emulator Test</h1>
+    <canvas id="canvas" style="border:2px solid #0f0"></canvas>
+    
     <script>
-        let currentCore = null;
-        let currentGame = null;
-
-        function startGame(system, gameUrl) {
-            // Hide game selection, show emulator
-            document.getElementById('game-selection').style.display = 'none';
-            document.getElementById('emulator-container').style.display = 'block';
-            
-            currentGame = gameUrl;
-            
-            // Initialize EmulatorJS
-            window.EJS_player = '#canvas';
-            window.EJS_gameUrl = gameUrl;
-            window.EJS_core = system; // 'nes', 'snes', 'gba', etc.
-            window.EJS_biosUrl = `bios/${system}.zip`; // Optional BIOS
-            window.EJS_startOnLoaded = true;
-            
-            // Optional: Performance settings
-            window.EJS_loadStateURL = ''; // Auto-load save state
-            window.EJS_defaultOptions = {
-                // Controller settings
-                'player-1': 0,
-                'save-state-location': 'browser', // Store saves in browser
-                'showStartButton': true,
-            };
-            
-            // Load the emulator
-            const script = document.createElement('script');
-            script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
-            script.onload = () => {
-                console.log('Emulator loaded for:', system, gameUrl);
-            };
-            document.body.appendChild(script);
-        }
-
-        function saveState() {
-            if (window.EJS_saveState) {
-                window.EJS_saveState();
-                alert('Game saved to browser storage!');
-            }
-        }
-
-        function loadState() {
-            if (window.EJS_loadState) {
-                window.EJS_loadState();
-            }
-        }
-
-        function exitGame() {
-            // Clean up emulator
-            document.getElementById('canvas').remove();
-            const newCanvas = document.createElement('canvas');
-            newCanvas.id = 'canvas';
-            document.getElementById('emulator-container').appendChild(newCanvas);
-            
-            // Show game selection
-            document.getElementById('game-selection').style.display = 'grid';
-            document.getElementById('emulator-container').style.display = 'none';
-            
-            // Reset variables
-            currentCore = null;
-            currentGame = null;
-        }
-
-        // Keyboard controls info
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && currentGame) {
-                exitGame();
-            }
-        });
+        // Minimal config
+        window.EJS_player = '#canvas';
+        window.EJS_gameUrl = 'games/'; // CHANGE THIS
+        window.EJS_core = 'gba';
+        window.EJS_startOnLoaded = true;
     </script>
+    <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
 </body>
 </html>
